@@ -1,1 +1,120 @@
+import customtkinter as ctk
+import math
 
+root = ctk.CTk()
+root.geometry("600x750")
+root.minsize(600,750)
+root.maxsize(600,750)
+root.title("Calculator")
+
+frame = ctk.CTkFrame(root)
+frame.pack(fill = "both", expand =True, padx =(20, 20), pady = 10)
+
+display_entry = ctk.CTkEntry(frame, placeholder_text=" Enter", height= 100, font= ctk.CTkFont("Arial", size = 30))
+display_entry.pack(fill = "x", pady = 10)
+
+# Frames for buttons
+frame1 = ctk.CTkFrame(frame, height = 68)
+frame1.pack(fill = "x", padx = 5, pady = 5)
+frame2 = ctk.CTkFrame(frame, height = 68)
+frame2.pack(fill = "x", padx = 5, pady = 5)
+frame3 = ctk.CTkFrame(frame, height = 68)
+frame3.pack(fill = "x", padx = 5, pady = 5)
+frame4 = ctk.CTkFrame(frame, height = 68)
+frame4.pack(fill = "x", padx = 5, pady = 5)
+frame5 = ctk.CTkFrame(frame, height = 68)
+frame5.pack(fill = "x", padx = 5, pady = 5)
+frame6 = ctk.CTkFrame(frame, height = 68)
+frame6.pack(fill = "x", padx = 5, pady = 5)
+
+def click_button(text):
+    display_entry.insert('end',  str(text))
+
+def calculation():
+    text = display_entry.get()
+    if "^" in text:
+        text = text.replace("^", "**")
+    if "²" in text:
+        text = text.replace("²", "**2")
+    if "X" in text:
+        text = text.replace("X", "*")
+    if "÷" in text:
+        text = text.replace("÷", "/")
+    if "√" in text:
+        while "√" in text:
+            start = text.find("√")
+            if '(' in text and ')' in text:
+                left_bracket_pos = text.find('(')
+                right_brachket_pos = text.find(')')
+                expr = text[left_bracket_pos + 1 : right_brachket_pos]
+                text = text.replace("√(" + expr + ")", "math.sqrt(" + expr + ")")
+            else:
+                end = start + 1
+                while end < len(text) and text[end].isdigit():
+                    end += 1
+                num = text[start+1:end]
+                text = text.replace("√" + num, "math.sqrt(" + num + ")")
+
+    try:
+        result = eval(str(text))
+        display_entry.delete(0, "end")
+        display_entry.insert("end", str(result))
+    except Exception as e:
+        display_entry.delete(0, "end")
+        display_entry.insert("end", "Error occured! Pls check the format")
+
+C = ctk.CTkButton(frame1, text="Clear", height=68, width=120, font=ctk.CTkFont("Arial", size=30), command=lambda: display_entry.delete(0, "end"))
+C.pack( padx=(10, 10), pady=10, side = "left" )
+mul = ctk.CTkButton(frame1, text="X", height=68, width=120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('X'))
+mul.pack(padx=(10, 10), pady=10, side = "left" )
+div = ctk.CTkButton(frame1, text="÷", height=68, width=120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('÷'))
+div.pack(padx=(10, 10), pady=10, side = "left")
+delete = ctk.CTkButton(frame1, text="DEL", height=68, width=120, font=ctk.CTkFont("Arial", size=30), command=lambda: display_entry.delete(len(display_entry.get())-1, 'end'))
+delete.pack(padx=(10, 10), pady=10, side = "left")
+
+seven= ctk.CTkButton(frame2, text="7", height=68, width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('7'))
+seven.pack(padx = 10, pady = 10, side = "left")
+eight= ctk.CTkButton(frame2, text="8", height=68, width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('8'))
+eight.pack(padx = 10, pady = 10, side = "left")
+nine= ctk.CTkButton(frame2, text="9", height=68, width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('9'))
+nine.pack(padx = 10, pady = 10, side = "left")
+plus= ctk.CTkButton(frame2, text="+", height=68, width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('+'))
+plus.pack(padx = 10, pady = 10, side = "left")
+
+four= ctk.CTkButton(frame3, text="4", height=68, width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('4'))
+four.pack(padx = 10, pady = 10, side = "left")
+five= ctk.CTkButton(frame3, text="5", height=68, width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('5'))
+five.pack(padx = 10, pady = 10, side = "left")
+six= ctk.CTkButton(frame3, text="6", height=68, width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('6'))
+six.pack(padx = 10, pady = 10, side = "left")
+minus= ctk.CTkButton(frame3, text="-", height=68, width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('-'))
+minus.pack(padx = 10, pady = 10, side = "left")
+
+one= ctk.CTkButton(frame4, text="1", height=68, width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('1'))
+one.pack(padx = 10, pady = 10, side = "left")
+two= ctk.CTkButton(frame4, text="2", height=68, width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('2'))
+two.pack(padx = 10, pady = 10, side = "left")
+three= ctk.CTkButton(frame4, text="3", height=68, width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('3'))
+three.pack(padx = 10, pady = 10, side = "left")
+dot= ctk.CTkButton(frame4, text=".", height=68 , width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('.'))
+dot.pack(padx = 10, pady = 10, side = "left")
+
+zero= ctk.CTkButton(frame5, text="0", height=68, width= 120 , font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('0'))
+zero.pack(padx = 10, pady = 10, side = "left")
+left_bracket= ctk.CTkButton(frame5, text="(", height=68 , width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('('))
+left_bracket.pack(padx = 10, pady = 10, side = "left")
+right_bracket= ctk.CTkButton(frame5, text=")", height=68 , width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button(')'))
+right_bracket.pack(padx = 10, pady = 10, side = "left")
+equal= ctk.CTkButton(frame5, text="=", height=68 , width = 120, font=ctk.CTkFont("Arial", size=30), command=calculation)
+equal.pack(padx = 10, pady = 10, side = "left")
+
+zero_2= ctk.CTkButton(frame6, text="00", height=68, width= 120 , font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('00'))
+zero_2.pack(padx = 10, pady = 10, side = "left")
+raise_two= ctk.CTkButton(frame6, text="^", height=68 , width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('^'))
+raise_two.pack(padx = 10, pady = 10, side = "left")
+square= ctk.CTkButton(frame6, text=" x²", height=68 , width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('²'))
+square.pack(padx = 10, pady = 10, side = "left")
+sqrt= ctk.CTkButton(frame6, text="√", height=68 , width = 120, font=ctk.CTkFont("Arial", size=30), command=lambda: click_button('√'))
+sqrt.pack(padx = 10, pady = 10, side = "left")
+
+root.mainloop()
